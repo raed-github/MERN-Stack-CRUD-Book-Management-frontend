@@ -1,24 +1,27 @@
-import React,{useState} from "react";
+import React,{useState,useId} from "react";
 import { Link } from "react-router-dom";
 import '../App.css';
+import { useDispatch } from "react-redux";
 
 const CreateBook = (props)=>{
-    const [book,setBook] = useState({
-        title: '',
-        isbn: '',
-        author: '',
-        description: '',
-        published_date: '',
-        publisher: '',
-    });
-
+    const initialState = {
+      books:[]
+    }
+    const bookId = useId()
+    const [book,setBook] = useState({id: bookId})
+    const dispatch = useDispatch()
     const onChange = (e)=>{
-        setBook({...book,[e.target.name]:[e.target.value]});
+      e.preventDefault();
+        setBook({...book,[e.target.name]:[e.target.value]})
     }
 
     const onSubmit = (e)=>{
         e.preventDefault();
         console.log(book);
+        dispatch({
+          type: "ADD_BOOK",
+          payload: book
+        });
     }
 
     return (
@@ -42,7 +45,7 @@ const CreateBook = (props)=>{
                       placeholder='Title of the Book'
                       name='title'
                       className='form-control'
-                      value={book.title}
+                      value={book?book.title:''}
                       onChange={onChange}
                     />
                   </div>
@@ -54,7 +57,7 @@ const CreateBook = (props)=>{
                       placeholder='ISBN'
                       name='isbn'
                       className='form-control'
-                      value={book.isbn}
+                      value={book?book.isbn:''}
                       onChange={onChange}
                     />
                   </div>
@@ -65,7 +68,7 @@ const CreateBook = (props)=>{
                       placeholder='Author'
                       name='author'
                       className='form-control'
-                      value={book.author}
+                      value={book?book.author:''}
                       onChange={onChange}
                     />
                   </div>
@@ -76,7 +79,7 @@ const CreateBook = (props)=>{
                       placeholder='Describe this book'
                       name='description'
                       className='form-control'
-                      value={book.description}
+                      value={book?book.description:''}
                       onChange={onChange}
                     />
                   </div>
@@ -87,7 +90,7 @@ const CreateBook = (props)=>{
                       placeholder='published_date'
                       name='published_date'
                       className='form-control'
-                      value={book.published_date}
+                      value={book?book.published_date:''}
                       onChange={onChange}
                     />
                   </div>
@@ -97,7 +100,7 @@ const CreateBook = (props)=>{
                       placeholder='Publisher of this Book'
                       name='publisher'
                       className='form-control'
-                      value={book.publisher}
+                      value={book?book.publisher:''}
                       onChange={onChange}
                     />
                   </div>

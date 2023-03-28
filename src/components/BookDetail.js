@@ -1,78 +1,25 @@
-import { useState,useEffect } from "react";
+import { useState } from "react";
+import {useSelector} from "react-redux";
 
 import { Link,useParams } from "react-router-dom";
 import BookItem from './BookItem';
+
 import '../App.css';
 
 const BookDetail = () => {
-  const initialState = [
-    {
-        id: '1',
-        title: 'title',
-        isbn: 'isbn',
-        author: 'author',
-        description: 'descrition',
-        published_date: 'published_date',
-        publisher: 'publisher'
-    },
-    {
-        id: '2',
-        title: 'title',
-        isbn: 'isbn',
-        author: 'author',
-        description: 'descrition',
-        published_date: 'published_date',
-        publisher: 'publisher'
-    },
-    {
-        id: '3',
-        title: 'title',
-        isbn: 'isbn',
-        author: 'author',
-        description: 'descrition',
-        published_date: 'published_date',
-        publisher: 'publisher'
-    },
-    {
-        id: '4',
-        title: 'title',
-        isbn: 'isbn',
-        author: 'author',
-        description: 'descrition',
-        published_date: 'published_date',
-        publisher: 'publisher'
-    }
-];
-const [books,setBooks] = useState(initialState);
+  const params = useParams();
+  const books = useSelector(state=>state.books)
+  const loadBook = books.find(obj => {
+    return obj.id === params.id;
+  });
 
-const [book, setBook] = useState({});
+  const [book,setBook] = useState(loadBook)
 
-const id = useParams();
-useEffect(()=>{
-  const newBookList = books.map((book) => {
-      if (book.id === id) {
-          const updatedBook = {
-              id: book.id,
-              title: book.title,
-              isbn: book.isbn,
-              author: book.author,
-              description: book.description,
-              published_date: book.published_date,
-              publisher: book.publisher
-          };
-          return updatedBook;
-      }
-      setBook(book);
-  return book;
-  }
-);   
-setBooks(newBookList);
-},[])
-    const onDeleteClick = (id)=>{
-        console.log('deleting book');
-    }
+const onDeleteClick = (id)=>{
+    console.log('deleting book');
+}
 
-    return (
+  return (
         <div className='BookDetail'>
           <div className='container'>
             <div className='row'>

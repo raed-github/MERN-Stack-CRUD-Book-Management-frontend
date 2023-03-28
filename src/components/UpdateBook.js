@@ -1,60 +1,18 @@
-import { useState } from "react";
+import { useState,useReducer } from "react";
+import { useSelector } from "react-redux";
 import { useParams,Link } from "react-router-dom";
+import rootReducer from '../reducers/rootReducer'
 import '../App.css';
 
 const UpdateBook = (props)=>{
-    const initialState = [
-        {
-            id: '1',
-            title: 'title',
-            isbn: 'isbn',
-            author: 'author',
-            description: 'descrition',
-            published_date: 'published_date',
-            publisher: 'publisher'
-        },
-        {
-            id: '2',
-            title: 'title',
-            isbn: 'isbn',
-            author: 'author',
-            description: 'descrition',
-            published_date: 'published_date',
-            publisher: 'publisher'
-        },
-        {
-            id: '3',
-            title: 'title',
-            isbn: 'isbn',
-            author: 'author',
-            description: 'descrition',
-            published_date: 'published_date',
-            publisher: 'publisher'
-        },
-        {
-            id: '4',
-            title: 'title',
-            isbn: 'isbn',
-            author: 'author',
-            description: 'descrition',
-            published_date: 'published_date',
-            publisher: 'publisher'
-        }
-    ];
-    const [books,setBooks] = useState(initialState);
-        
-    const {id} = useParams();
+    const books = useSelector(state=>state.books)
+    const params = useParams()
+    const [state,dispatch] = useReducer(rootReducer,{books})
+    const loadBook = state.books.find(obj => {
+        return obj.id === params.id;
+    });    
+    const [book, setBook] = useState(loadBook)
 
-    const findArrayElementById = (array,id)=>{
-        return array.find((element) => {
-            return element.id === id;
-        });
-    };
-
-    const bookToUpdate = findArrayElementById(books,id);
-
-    const [book, setBook] = useState(bookToUpdate);
-    
     const onChange = (e=>{
         setBook({...book, [e.target.name]:[e.target.value]
         });
@@ -62,23 +20,16 @@ const UpdateBook = (props)=>{
 
     const onSubmit = (e)=>{
             e.preventDefault();
-            const newBookList = books.map((b) => {
-                if (b.id === id) {
-                    const updatedBook = {
-                        id: book.id,
-                        title: book.title,
-                        isbn: book.isbn,
-                        author: book.author,
-                        description: book.description,
-                        published_date: book.published_date,
-                        publisher: book.publisher
-                    };
-                    return updatedBook;
-                }
-            return b;
-            }
-        );   
-        setBooks(newBookList);
+            const updatedBook = {
+                id: book.id,
+                title: book.title,
+                isbn: book.isbn,
+                author: book.author,
+                description: book.description,
+                published_date: book.published_date,
+                publisher: book.publisher
+            };   
+        dispatch({type:"UPDATE_BOOK",payload:updatedBook})
     }
 
     return (

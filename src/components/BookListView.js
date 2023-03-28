@@ -1,50 +1,15 @@
-import { useState } from "react";
+import  React,{useReducer} from "react";
+import {useSelector} from "react-redux";
 import '../App.css';
 import { Link } from 'react-router-dom';
 import BookCard from './BookCard';
+import rootReducer from '../reducers/rootReducer'
 
 const BookListView = ()=>{
-    const initialState = [
-        {
-            id: '1',
-            title: 'title',
-            isbn: 'isbn',
-            author: 'author',
-            description: 'descrition',
-            published_date: 'published_date',
-            publisher: 'publisher'
-        },
-        {
-            id: '2',
-            title: 'title',
-            isbn: 'isbn',
-            author: 'author',
-            description: 'descrition',
-            published_date: 'published_date',
-            publisher: 'publisher'
-        },
-        {
-            id: '3',
-            title: 'title',
-            isbn: 'isbn',
-            author: 'author',
-            description: 'descrition',
-            published_date: 'published_date',
-            publisher: 'publisher'
-        },
-        {
-            id: '4',
-            title: 'title',
-            isbn: 'isbn',
-            author: 'author',
-            description: 'descrition',
-            published_date: 'published_date',
-            publisher: 'publisher'
-        }
-    ];
-    const [books,setBooks] = useState(initialState);
-    const bookList = books.length === 0 ? 'no book found'
-                        : books.map((book, k) => <BookCard book={book} key={k} />);
+    const books = useSelector(state=>state.books)
+    const[state,dispatch] = useReducer(rootReducer,{books})
+    const bookList = state.books.length === 0 ? 'no book found'
+                        : state.books.map((book, k) => <BookCard book={book} key={k} />);
     return(
         <div className='ShowBookList'>
             <div className='container'>
